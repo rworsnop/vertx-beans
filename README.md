@@ -46,50 +46,35 @@ property placeholder mechanism. (For example, they'd live in `application.proper
 
 Here are the properties:
 
-**`vertx.eventLoopPoolSize`** 
-See `VertxOptions.setEventLoopPoolSize`
+- **`vertx.eventLoopPoolSize`** &mdash; See `VertxOptions.setEventLoopPoolSize`
 
-**`vertx.maxEventLoopExecutionTime`** 
-See `VertxOptions.setMaxEventLoopExecutionTime`
+- **`vertx.maxEventLoopExecutionTime`** &mdash; See `VertxOptions.setMaxEventLoopExecutionTime`
 
-**`vertx.warningExceptionTime`** 
-See `VertxOptions.setWarningExceptionTime`
+- **`vertx.warningExceptionTime`** &mdash; See `VertxOptions.setWarningExceptionTime`
 
-**`vertx.blockedThreadCheckInterval`** 
-See `VertxOptions.setBlockedThreadCheckInterval`
+- **`vertx.blockedThreadCheckInterval`** &mdash; See `VertxOptions.setBlockedThreadCheckInterval`
 
-**`vertx.workerPoolSize`** 
-See `VertxOptions.setWorkerPoolSize`
+- **`vertx.workerPoolSize`** &mdash; See `VertxOptions.setWorkerPoolSize`
 
-**`vertx.maxWorkerExecutionTime`** 
-See `VertxOptions.setMaxWorkerExecutionTime`
+- **`vertx.maxWorkerExecutionTime`** &mdash; See `VertxOptions.setMaxWorkerExecutionTime`
 
-**`vertx.internalBlockingPoolSize`** 
-See `VertxOptions.setInternalBlockingPoolSize`
+- **`vertx.internalBlockingPoolSize`** &mdash; See `VertxOptions.setInternalBlockingPoolSize`
 
-**`vertx.haEnabled`** 
-See `VertxOptions.setHaEnabled`
+- **`vertx.haEnabled`** &mdash; See `VertxOptions.setHaEnabled`
 
-**`vertx.haGroup`** 
-See `VertxOptions.setHaGroup`
+- **`vertx.haGroup`** &mdash; See `VertxOptions.setHaGroup`
 
-**`vertx.quorumSize`** 
-See `VertxOptions.setQuorumSize`
+- **`vertx.quorumSize`** &mdash; See `VertxOptions.setQuorumSize`
 
-**`vertx.clustered`** 
-See `VertxOptions.setClustered`
+- **`vertx.clustered`** &mdash; See `VertxOptions.setClustered`
 
-**`vertx.clusterHost`** 
-See `VertxOptions.setClusterHost`
+- **`vertx.clusterHost`** &mdash; See `VertxOptions.setClusterHost`
 
-**`vertx.clusterPort`** 
-See `VertxOptions.setClusterPort`
+- **`vertx.clusterPort`** &mdash; See `VertxOptions.setClusterPort`
 
-**`vertx.clusterPingInterval`** 
-See `VertxOptions.setClusterPingInterval`
+- **`vertx.clusterPingInterval`** &mdash; See `VertxOptions.setClusterPingInterval`
 
-**`vertx.clusterPingReplyInterval`** 
-See `VertxOptions.setClusterPingReplyInterval`
+- **`vertx.clusterPingReplyInterval`** &mdash; See `VertxOptions.setClusterPingReplyInterval`
 
 ## Providing your own ClusterManager and/or MetricsOptions
 
