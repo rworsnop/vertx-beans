@@ -12,13 +12,13 @@ If you're feeling impatient, just head over to the [example](https://github.com/
 ## Getting the beans into your application context
 
 The Vert.x beans provided by this library are in a Spring Java Configuration class. There are a number of ways to
-include such a configuration into your application context. One of them is to use the `@ComponentScan` annotation:
+include such a configuration into your application context. One of them is to use the `@Import` annotation:
 ```
-@ComponentScan("io.vertx.spring")
+@Import(io.vertxbeans.VertxBeans.class)
 ```
 or, if you're using RxJava:
 ```
-@ComponentScan("io.vertx.rxjava.spring")
+@Import(io.vertxbeans.rxjava.VertxBeans.class)
 ```
 
 ## Using the beans
@@ -46,35 +46,35 @@ property placeholder mechanism. (For example, they'd live in `application.proper
 
 Here are the properties:
 
-- **`vertx.eventLoopPoolSize`** &mdash; See `VertxOptions.setEventLoopPoolSize`
+- **`vertx.event-loop-pool-size`** &mdash; See `VertxOptions.setEventLoopPoolSize`
 
-- **`vertx.maxEventLoopExecutionTime`** &mdash; See `VertxOptions.setMaxEventLoopExecutionTime`
+- **`vertx.max-event-loop-execution-time`** &mdash; See `VertxOptions.setMaxEventLoopExecutionTime`
 
-- **`vertx.warningExceptionTime`** &mdash; See `VertxOptions.setWarningExceptionTime`
+- **`vertx.warning-exception-time`** &mdash; See `VertxOptions.setWarningExceptionTime`
 
-- **`vertx.blockedThreadCheckInterval`** &mdash; See `VertxOptions.setBlockedThreadCheckInterval`
+- **`vertx.blocked-thread-check-interval`** &mdash; See `VertxOptions.setBlockedThreadCheckInterval`
 
-- **`vertx.workerPoolSize`** &mdash; See `VertxOptions.setWorkerPoolSize`
+- **`vertx.worker-pool-size`** &mdash; See `VertxOptions.setWorkerPoolSize`
 
-- **`vertx.maxWorkerExecutionTime`** &mdash; See `VertxOptions.setMaxWorkerExecutionTime`
+- **`vertx.max-worker-execution-time`** &mdash; See `VertxOptions.setMaxWorkerExecutionTime`
 
-- **`vertx.internalBlockingPoolSize`** &mdash; See `VertxOptions.setInternalBlockingPoolSize`
+- **`vertx.internal-blocking-pool-size`** &mdash; See `VertxOptions.setInternalBlockingPoolSize`
 
-- **`vertx.haEnabled`** &mdash; See `VertxOptions.setHaEnabled`
+- **`vertx.ha-enabled`** &mdash; See `VertxOptions.setHaEnabled`
 
-- **`vertx.haGroup`** &mdash; See `VertxOptions.setHaGroup`
+- **`vertx.ha-group`** &mdash; See `VertxOptions.setHaGroup`
 
-- **`vertx.quorumSize`** &mdash; See `VertxOptions.setQuorumSize`
+- **`vertx.quorum-size`** &mdash; See `VertxOptions.setQuorumSize`
 
 - **`vertx.clustered`** &mdash; See `VertxOptions.setClustered`
 
-- **`vertx.clusterHost`** &mdash; See `VertxOptions.setClusterHost`
+- **`vertx.cluster-host`** &mdash; See `VertxOptions.setClusterHost`
 
-- **`vertx.clusterPort`** &mdash; See `VertxOptions.setClusterPort`
+- **`vertx.cluster-port`** &mdash; See `VertxOptions.setClusterPort`
 
-- **`vertx.clusterPingInterval`** &mdash; See `VertxOptions.setClusterPingInterval`
+- **`vertx.cluster-ping-interval`** &mdash; See `VertxOptions.setClusterPingInterval`
 
-- **`vertx.clusterPingReplyInterval`** &mdash; See `VertxOptions.setClusterPingReplyInterval`
+- **`vertx.cluster-ping-reply-interval`** &mdash; See `VertxOptions.setClusterPingReplyInterval`
 
 ## Providing your own ClusterManager and/or MetricsOptions
 

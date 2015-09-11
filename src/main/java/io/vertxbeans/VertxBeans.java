@@ -1,12 +1,10 @@
-package io.vertx.rxjava.spring;
+package io.vertxbeans;
 
-
+import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.rxjava.core.Vertx;
-import io.vertx.rxjava.core.eventbus.EventBus;
-import io.vertx.rxjava.core.file.FileSystem;
-import io.vertx.rxjava.core.shareddata.SharedData;
-import io.vertx.spring.VertxBeansBase;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.file.FileSystem;
+import io.vertx.core.shareddata.SharedData;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,6 +13,7 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class VertxBeans extends VertxBeansBase{
+
 
     @Bean
     public Vertx vertx(VertxOptions options) throws Throwable {
@@ -41,7 +40,8 @@ public class VertxBeans extends VertxBeansBase{
     }
 
     private Vertx clusteredVertx(VertxOptions options) throws Throwable {
-        return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
+        return clusteredVertx(handler->Vertx.clusteredVertx(options, handler));
     }
+
 
 }

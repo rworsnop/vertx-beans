@@ -1,4 +1,4 @@
-package io.vertx.spring;
+package io.vertxbeans;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
@@ -27,20 +27,20 @@ public class VertxBeansBase {
 
     @Bean
     protected VertxOptions vertxOptions(
-            @Value("${vertx.warningExceptionTime:}") Long warningExceptionTime,
-            @Value("${vertx.eventLoopPoolSize:}") Integer eventLoopPoolSize,
-            @Value("${vertx.maxEventLoopExecutionTime:}") Long maxEventLoopExecutionTime,
-            @Value("${vertx.workerPoolSize:}") Integer workerPoolSize,
-            @Value("${vertx.maxWorkerExecutionTime:}") Long maxWorkerExecutionTime,
-            @Value("${vertx.blockedThreadCheckInterval:}") Long blockedThreadCheckInterval,
-            @Value("${vertx.internalBlockingPoolSize:}") Integer internalBlockingPoolSize,
-            @Value("${vertx.haEnabled:false}") boolean haEnabled,
-            @Value("${vertx.haGroup:}") String haGroup,
-            @Value("${vertx.quorumSize:}") Integer quorumSize,
-            @Value("${vertx.clusterHost:localhost}") String clusterHost,
-            @Value("${vertx.clusterPort:}") Integer clusterPort,
-            @Value("${vertx.clusterPingInterval:}") Long clusterPingInterval,
-            @Value("${vertx.clusterPingReplyInterval:}") Long clusterPingReplyInterval,
+            @Value("${vertx.warning-exception-time:}") Long warningExceptionTime,
+            @Value("${vertx.event-loop-pool-size:}") Integer eventLoopPoolSize,
+            @Value("${vertx.max-event-loop-execution-time:}") Long maxEventLoopExecutionTime,
+            @Value("${vertx.worker-pool-size:}") Integer workerPoolSize,
+            @Value("${vertx.max-worker-execution-time:}") Long maxWorkerExecutionTime,
+            @Value("${vertx.blocked-thread-check-interval:}") Long blockedThreadCheckInterval,
+            @Value("${vertx.internal-blocking-pool-size:}") Integer internalBlockingPoolSize,
+            @Value("${vertx.ha-enabled:false}") boolean haEnabled,
+            @Value("${vertx.ha-group:}") String haGroup,
+            @Value("${vertx.quorum-size:}") Integer quorumSize,
+            @Value("${vertx.cluster-host:localhost}") String clusterHost,
+            @Value("${vertx.cluster-port:}") Integer clusterPort,
+            @Value("${vertx.cluster-ping-interval:}") Long clusterPingInterval,
+            @Value("${vertx.cluster-ping-reply-interval:}") Long clusterPingReplyInterval,
             @Value("${vertx.clustered:false}") boolean clustered) {
         VertxOptions options = new VertxOptions();
 
