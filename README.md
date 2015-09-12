@@ -9,6 +9,10 @@ It does this in two ways:
 
 If you're feeling impatient, just head over to the [example](https://github.com/rworsnop/vertx-beans-example). It demonstrates how to use this library with Spring Boot.
 
+**Important note:** If you're looking for a library that allows you to inject your application beans into a verticle, you need something
+like [spring-vert-ext](https://github.com/amoAHCP/spring-vertx-ext). Vert.x Beans flips this around, taking the opposite approach. See 
+[below](spring-is-now-the-framework) for more details on this.
+
 ## Getting the beans into your application context
 
 The Vert.x beans provided by this library are in a Spring Java Configuration class. There are a number of ways to
