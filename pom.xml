@@ -25,6 +25,11 @@
         <url>https://github.com/rworsnop/vertx-beans</url>
     </scm>
 
+    <properties>
+        <!-- Build with -Dgpg.skip=false to sign artifacts -->
+        <gpg.skip>true</gpg.skip>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>io.vertx</groupId>
