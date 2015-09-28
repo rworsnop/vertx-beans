@@ -57,7 +57,7 @@ SharedData sharedData;
 
 ## Configuring Vert.x Beans
 
-Vert.x Beans doesn't require configuration, but there are a number of properties that can be supplied to it via Spring's
+Vert.x Beans doesn't *require* configuration, but there are a number of optional properties that can be supplied to it via Spring's
 property placeholder mechanism. (For example, they'd live in `application.properties` in a basic Spring Boot application.)
 
 Here are the properties:
