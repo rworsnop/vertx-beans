@@ -13,6 +13,18 @@ If you're feeling impatient, just head over to the [example](https://github.com/
 like [spring-vert-ext](https://github.com/amoAHCP/spring-vertx-ext). Vert.x Beans flips this around, taking the opposite approach. See 
 [below](#spring-is-now-the-framework) for more details on this.
 
+## Getting the library 
+
+Either grab the latest from the [releases page](https://github.com/rworsnop/vertx-beans/releases) or add a Maven dependency:
+```
+<dependency>
+    <groupId>com.github.rworsnop</groupId>
+    <artifactId>vertx-beans</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+
 ## Getting the beans into your application context
 
 The Vert.x beans provided by this library are in a Spring Java Configuration class. There are a number of ways to
