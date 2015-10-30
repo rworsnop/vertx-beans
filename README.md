@@ -100,7 +100,9 @@ application context.
 For example, if you're using XML:
 
 ```
-<bean id="clusterManager" class="com.acme.MyClusterManager"/>
+<bean id="clusterManager" class="io.vertx.spi.cluster.hazelcast.HazelcastClusterManager">
+  <property name="config" ref="cacheConfig"/>
+</bean>
 ```
 ```
 <bean id="metricsOptions" class="io.vertx.ext.dropwizard.DropwizardMetricsOptions">
