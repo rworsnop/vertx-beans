@@ -1,6 +1,7 @@
 package io.vertxbeans;
 
 import io.vertx.core.AsyncResult;
+import io.vertx.core.AsyncResultHandler;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.metrics.MetricsOptions;
@@ -9,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
@@ -65,25 +69,19 @@ public class VertxBeansBase {
         return options;
     }
 
-    protected <T> T clusteredVertx(Consumer<Handler<AsyncResult<T>>> consumer) throws Throwable {
-        AtomicReference<AsyncResult<T>> result = new AtomicReference<>();
-        CountDownLatch countDownLatch = new CountDownLatch(1);
+    protected <T> T clusteredVertx(Consumer<AsyncResultHandler<T>> consumer) throws InterruptedException, ExecutionException, TimeoutException {
+        CompletableFuture<T> future = new CompletableFuture<>();
         clusteredVertx(consumer, ar -> {
-            result.set(ar);
-            countDownLatch.countDown();
+            if (ar.succeeded()){
+                future.complete(ar.result());
+            } else{
+                future.completeExceptionally(ar.cause());
+            }
         });
-        if (!countDownLatch.await(2, MINUTES)) {
-            throw new RuntimeException("Timed out trying to join cluster!");
-        }
-        AsyncResult<T> ar = result.get();
-        if (ar.succeeded()) {
-            return ar.result();
-        } else {
-            throw ar.cause();
-        }
+        return future.get(2, MINUTES);
     }
 
-    private <T> void clusteredVertx(Consumer<Handler<AsyncResult<T>>> consumer, Handler<AsyncResult<T>> handler){
+    private <T> void clusteredVertx(Consumer<AsyncResultHandler<T>> consumer, AsyncResultHandler<T> handler){
         consumer.accept(handler);
     }
 
