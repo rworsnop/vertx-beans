@@ -10,8 +10,7 @@ It does this in two ways:
 If you're feeling impatient, just head over to the [example](https://github.com/rworsnop/vertx-beans-example). It demonstrates how to use this library with Spring Boot.
 
 **Important note:** If you're looking for a library that allows you to inject your application beans into a verticle, you need something
-like [spring-vert-ext](https://github.com/amoAHCP/spring-vertx-ext). Vert.x Beans flips this around, taking the opposite approach. See 
-[below](#spring-is-now-the-framework) for more details on this.
+like [spring-vert-ext](https://github.com/amoAHCP/spring-vertx-ext). Vert.x Beans flips this around, taking the opposite approach. 
 
 ## Getting the library 
 
@@ -110,9 +109,73 @@ For example, if you're using XML:
 </bean>   
 ```
 
-## Spring is now the framework
+
+## Creating multiple "instances"
 
 Vert.x 3.0 allows developers to use it as either a framework (with verticles) or a library (in  more of a Node.js style).
 Vert.x Beans is best-suited to the latter approach. Do note that this means that there is no longer a concept of "instances", so you
 are responsible for making sure you are using a number of event loops commensurate with the number of cores on the machine.
 In practice this means calling `Vertx.createHttpServer`, `EventBus.consumer`, etc. multiple times.
+
+Vertx Beans ships with useful helpers for this.
+
+In these examples, we create two HTTP servers.
+
+Here, we'll do it synchronously, waiting for one minute to perform the work:
+
+```
+try {
+    List<HttpServer> servers =  InstanceRunner.executeBlocking(2,
+        (Handler<AsyncResult<HttpServer>> handler) ->
+            vertx.createHttpServer().requestHandler(someHandler).listen(8080, handler),
+            1, TimeUnit.MINUTES);
+} catch (InterruptedException | ExecutionException | TimeoutException e) {
+    e.printStackTrace();
+}            
+```
+
+If everything goes well, the above will return two `HTTPServer` instances. In the event of an error, or if there are
+no results within one minute, the method will throw an exception.
+
+The asynchronous version would look like this:
+
+```
+InstanceRunner.execute(2,
+        (Handler<AsyncResult<HttpServer>> handler) ->
+            vertx.createHttpServer().requestHandler(someHandler).listen(8080, handler),
+            result-> {
+                if (result.succeeded()){
+                   List<HttpServer> servers = result.result();
+                } else{
+                    result.cause().printStackTrace();
+                }
+            });
+```
+
+Notice that, instead of returning a `List`, this version allows us to pass a handler, which will receive the collated results when it 
+completes.
+
+This isn't pretty code. But if you're using RxJava, you're in luck. `org.vertxbeans.rxjava.InstanceRunner` allows you to write much
+neater code.
+
+Synchronous RxJava version:
+
+```
+try {
+    List<HttpServer> servers =  InstanceRunner.executeBlocking(2, 
+        () -> vertx.createHttpServer().requestHandler(someHandler).listenObservable(8080), 1, MINUTES);
+} catch (InterruptedException | ExecutionException | TimeoutException e) {
+    e.printStackTrace();
+}         
+```
+
+Instead of consuming a handler, the user's code must now supply an `Observable`.
+
+Finally, here's the asynchronous RxJava version:
+
+```
+InstanceRunner.execute(2, ()->vertx.createHttpServer().requestHandler(someHandler).listenObservable(8080))
+        .timeout(1, MINUTES)
+        .subscribe(httpServers -> {}
+        , Throwable::printStackTrace);
+```
