@@ -1,3 +1,5 @@
+See the [api docs](http://rworsnop.github.io/vertx-beans/apidocs/)
+
 # Vert.x Beans
 
 Vert.x Beans makes it easy for developers to use Vert.x 3.0 (and above) with Spring.
