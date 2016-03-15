@@ -26,7 +26,7 @@ public class ContextRunnerImpl implements ContextRunner{
     }
     @Override
     public <T> void execute(int instances, Consumer<Handler<AsyncResult<T>>> consumer, Handler<AsyncResult<List<T>>> resultHandler) {
-        if (Thread.currentThread().getName().startsWith("io.vertx")){
+        if (Thread.currentThread().getClass().getName().startsWith("io.vertx")){
             throw new IllegalStateException("Already on a Vert.x thread!");
         }
 
