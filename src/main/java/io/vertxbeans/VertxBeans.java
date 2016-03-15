@@ -39,6 +39,11 @@ public class VertxBeans extends VertxBeansBase{
         return vertx.sharedData();
     }
 
+    @Bean
+    public ContextRunner contextRunner(Vertx vertx){
+        return new ContextRunnerImpl(vertx);
+    }
+
     private Vertx clusteredVertx(VertxOptions options) throws Throwable {
         return clusteredVertx(handler->Vertx.clusteredVertx(options, handler));
     }

@@ -119,7 +119,15 @@ Vert.x Beans is best-suited to the latter approach. Do note that this means that
 are responsible for making sure you are using a number of event loops commensurate with the number of cores on the machine.
 In practice this means calling `Vertx.createHttpServer`, `EventBus.consumer`, etc. multiple times.
 
-Vertx Beans ships with useful helpers for this.
+Vertx Beans provides `ContextRunner` for doing this. It executes a callback a specified number of times, using a new event
+loop each time (this is useful if, for example, you want multiple HTTP servers to share event loops).
+
+To use `ContextRunner`, simply inject it:
+```
+@Resource
+private ContextRunner contextRunner;
+```
+
 
 In these examples, we create two HTTP servers.
 
@@ -127,7 +135,7 @@ Here, we'll do it synchronously, waiting for one minute to perform the work:
 
 ```
 try {
-    List<HttpServer> servers =  InstanceRunner.executeBlocking(2,
+    List<HttpServer> servers =  contextRunner.executeBlocking(2,
         (Handler<AsyncResult<HttpServer>> handler) ->
             vertx.createHttpServer().requestHandler(someHandler).listen(8080, handler),
             1, TimeUnit.MINUTES);
@@ -142,7 +150,7 @@ no results within one minute, the method will throw an exception.
 The asynchronous version would look like this:
 
 ```
-InstanceRunner.execute(2,
+contextRunner.execute(2,
         (Handler<AsyncResult<HttpServer>> handler) ->
             vertx.createHttpServer().requestHandler(someHandler).listen(8080, handler),
             result-> {
@@ -157,14 +165,14 @@ InstanceRunner.execute(2,
 Notice that, instead of returning a `List`, this version allows us to pass a handler, which will receive the collated results when it 
 completes.
 
-This isn't pretty code. But if you're using RxJava, you're in luck. `org.vertxbeans.rxjava.InstanceRunner` allows you to write much
+This isn't pretty code. But if you're using RxJava, you're in luck. `org.vertxbeans.rxjava.ContextRunner` allows you to write much
 neater code.
 
 Synchronous RxJava version:
 
 ```
 try {
-    List<HttpServer> servers =  InstanceRunner.executeBlocking(2, 
+    List<HttpServer> servers =  contextRunner.executeBlocking(2, 
         () -> vertx.createHttpServer().requestHandler(someHandler).listenObservable(8080), 1, MINUTES);
 } catch (InterruptedException | ExecutionException | TimeoutException e) {
     e.printStackTrace();
@@ -176,7 +184,7 @@ Instead of consuming a handler, the user's code must now supply an `Observable`.
 Finally, here's the asynchronous RxJava version:
 
 ```
-InstanceRunner.execute(2, ()->vertx.createHttpServer().requestHandler(someHandler).listenObservable(8080))
+contextRunner.execute(2, ()->vertx.createHttpServer().requestHandler(someHandler).listenObservable(8080))
         .timeout(1, MINUTES)
         .subscribe(httpServers -> {}
         , Throwable::printStackTrace);

@@ -40,6 +40,11 @@ public class VertxBeans extends VertxBeansBase{
         return vertx.sharedData();
     }
 
+    @Bean
+    public ContextRunner contextRunner(Vertx vertx){
+        return new ContextRunnerImpl(new io.vertxbeans.ContextRunnerImpl((io.vertx.core.Vertx) vertx.getDelegate()));
+    }
+
     private Vertx clusteredVertx(VertxOptions options) throws Throwable {
         return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
     }

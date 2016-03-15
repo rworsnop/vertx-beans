@@ -20,10 +20,12 @@ import java.util.function.Consumer;
  * The results of these asynchronous calls are collated and made available to the client.
  *
  * Created by Rob Worsnop on 2/2/16.
+ *
+ * @deprecated Use {@code ContextRunner} instead
  */
 public final class InstanceRunner {
     /**
-     * Execute user-supplied code and provide the collated results asynchronously.
+     * Execute user-supplied code on a new event loop and provide the collated results asynchronously.
      *
      * @param instances the number of times to execute the code
      * @param consumer consumes a {@code Handler} on which the result of a call is sent
@@ -43,7 +45,7 @@ public final class InstanceRunner {
         }
     }
     /**
-     * Execute user-supplied code and provide the collated results synchronously.
+     * Execute user-supplied code on a new event loop and provide the collated results synchronously.
      *
      * @param instances the number of times to execute the code
      * @param consumer consumes a {@code Handler} on which the result of a call is sent
