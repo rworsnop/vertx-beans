@@ -5,6 +5,8 @@ import io.vertx.core.Context;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.function.Consumer;
  * Created by Rob Worsnop on 3/15/16.
  */
 public class ContextRunnerImpl implements ContextRunner{
+    private final static Logger log = LoggerFactory.getLogger(ContextRunnerImpl.class);
 
     private final Vertx vertx;
 
@@ -72,9 +75,13 @@ public class ContextRunnerImpl implements ContextRunner{
         }
 
         private synchronized void pushResult(T result){
-            results.add(result);
             if (results.size() == count){
-                resultHandler.handle(Future.succeededFuture(results));
+                log.warn("Your callback must supply one result, and only one result, to ContextRunner. (Trying to add {0}.)", result);
+            } else{
+                results.add(result);
+                if (results.size() == count){
+                    resultHandler.handle(Future.succeededFuture(results));
+                }
             }
         }
     }
