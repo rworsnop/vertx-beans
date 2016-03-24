@@ -25,6 +25,11 @@ Either grab the latest from the [releases page](https://github.com/rworsnop/vert
 </dependency>
 ```
 
+For gradle use: 
+```
+    compile 'com.github.rworsnop:vertx-beans:1.2.1'
+```
+
 
 ## Getting the beans into your application context
 
