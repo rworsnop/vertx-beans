@@ -16,7 +16,9 @@ like [spring-vert-ext](https://github.com/amoAHCP/spring-vertx-ext). Vert.x Bean
 
 ## Getting the library 
 
-Either grab the latest from the [releases page](https://github.com/rworsnop/vertx-beans/releases) or add a Maven dependency:
+Either grab the latest from the [releases page](https://github.com/rworsnop/vertx-beans/releases) or add a dependency.
+
+Maven:
 ```
 <dependency>
     <groupId>com.github.rworsnop</groupId>
@@ -25,9 +27,9 @@ Either grab the latest from the [releases page](https://github.com/rworsnop/vert
 </dependency>
 ```
 
-For gradle use: 
+Gradle: 
 ```
-    compile 'com.github.rworsnop:vertx-beans:1.2.1'
+compile 'com.github.rworsnop:vertx-beans:1.2.1'
 ```
 
 
