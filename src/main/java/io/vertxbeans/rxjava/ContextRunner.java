@@ -1,11 +1,13 @@
 package io.vertxbeans.rxjava;
 
+import io.vertx.core.Vertx;
 import rx.Observable;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
@@ -40,4 +42,7 @@ public interface ContextRunner {
      * @throws TimeoutException if all of your instances don't provide a result within the timeout
      */
     <T> List<T> executeBlocking(int instances, Supplier<Observable<T>> supplier, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+
+    <R> R createProxy(Function<Vertx,R> creator, Class<R> clazz);
+
 }
