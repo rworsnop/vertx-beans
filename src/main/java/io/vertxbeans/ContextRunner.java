@@ -2,14 +2,12 @@ package io.vertxbeans;
 
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * When using Vertx Beans instead of verticles, there is no concept of instances.
@@ -43,6 +41,4 @@ public interface ContextRunner {
      * @throws TimeoutException if all of your instances don't provide a result within the timeout
      */
     <T> List<T> executeBlocking(int instances, Consumer<Handler<AsyncResult<T>>> consumer, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
-
-    <R> R createProxy(Function<Vertx,R> creator, Class<R> clazz);
 }

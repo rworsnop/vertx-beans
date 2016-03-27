@@ -8,27 +8,19 @@ import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Created by Rob Worsnop on 3/15/16.
  */
 public class ContextRunnerImpl implements ContextRunner{
     private final static Logger log = LoggerFactory.getLogger(ContextRunnerImpl.class);
-
-    private static final ThreadLocal<Map<Integer, Object>> proxiedObjects = ThreadLocal.withInitial(HashMap::new);
 
     private final Vertx vertx;
 
@@ -65,36 +57,6 @@ public class ContextRunnerImpl implements ContextRunner{
         return future.get(timeout, unit);
     }
 
-    @Override
-    public <R> R createProxy(Function<Vertx, R> creator, Class<R> clazz) {
-        return (R) Proxy.newProxyInstance(Vertx.class.getClassLoader(), new Class[]{clazz},
-                (proxy, method, args) -> invokeProxiedMethod(creator, proxy, method, args));
-    }
-
-    private <R> Object invokeProxiedMethod(Function<Vertx, R> creator, Object proxy, Method method, Object[] args) throws Throwable {
-        if (!Thread.currentThread().getClass().getName().startsWith("io.vertx")){
-            if (!method.getReturnType().equals(void.class)){
-                log.warn("Calling %s but not able to return anything because %s is not a Vert.x thread!",
-                        method.toString(), Thread.currentThread().getName());
-            }
-            return null;
-        }
-
-        int proxyId = System.identityHashCode(proxy);
-        Object proxied = proxiedObjects.get().get(proxyId);
-        if (proxied == null){
-            proxied = creator.apply(vertx);
-            proxiedObjects.get().put(proxyId, proxied);
-        }
-
-        try {
-            return method.invoke(proxied, args);
-        } catch (IllegalAccessException e) {
-            throw new AssertionError(e); // should be impossible
-        } catch (InvocationTargetException e) {
-            throw e.getCause();
-        }
-    }
 
     private <T> Consumer<Handler<AsyncResult<T>>>  wrap(Consumer<Handler<AsyncResult<T>>> consumer){
         Context context = vertx.getOrCreateContext();
@@ -123,5 +85,4 @@ public class ContextRunnerImpl implements ContextRunner{
             }
         }
     }
-
 }
