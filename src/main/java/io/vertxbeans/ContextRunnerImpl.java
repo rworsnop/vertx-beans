@@ -73,9 +73,9 @@ public class ContextRunnerImpl implements ContextRunner{
 
     private <R> Object invokeProxiedMethod(Function<Vertx, R> creator, Object proxy, Method method, Object[] args) throws Throwable {
         if (!Thread.currentThread().getClass().getName().startsWith("io.vertx")){
-            if (method.getReturnType() != void.class){
-                throw new IllegalStateException(String.format("Calling %s but not able to return anything because %s is not a Vert.x thread!",
-                        method.toString(), Thread.currentThread().getName()));
+            if (!method.getReturnType().equals(void.class)){
+                log.warn("Calling %s but not able to return anything because %s is not a Vert.x thread!",
+                        method.toString(), Thread.currentThread().getName());
             }
             return null;
         }
