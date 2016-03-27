@@ -196,3 +196,37 @@ contextRunner.execute(2, ()->vertx.createHttpServer().requestHandler(someHandler
         .subscribe(httpServers -> {}
         , Throwable::printStackTrace);
 ```
+
+## Sharing Vert.x client objects across contexts
+
+The "Spring way" of using things like `HttpClient` is to have a `FactoryBean`, or a `@Bean` method, that creates
+a single instance injected into beans across your application.
+
+The problem with this is that Vert.x does not expect these things to be used across multiple threads. You are likely
+to run into deadlock situations or have other problems if you do this.
+
+Fortunately, Spring has a solution to this problem: custom scopes. Specifically, `SimpleThreadScope`. Using this scope
+will ensure that each thread gets its own instance of the bean.
+
+For example, you would create an `HttpClient` like this:
+```
+@Bean
+@Scope(scopeName = "thread", proxyMode = ScopedProxyMode.INTERFACES)
+public HttpClient httpClient(Vertx vertx){
+  return vertx.createHttpClient();
+}
+```
+
+The above works because `io.vertx.core.http.HttpClient` is an interface. But the RxJava version is a class, so you need
+a different proxy mode for that:
+```
+@Bean
+@Scope(scopeName = "thread", proxyMode = ScopedProxyMode.TARGET_CLASS)
+// This is the RxJava version
+public HttpClient httpClient(Vertx vertx){
+  return vertx.createHttpClient();
+}
+```
+
+Note that the "thread" scope isn't registered by default. Please refer to the Spring documentation to see how to
+register custom scopes.
