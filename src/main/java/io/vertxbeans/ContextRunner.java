@@ -44,5 +44,20 @@ public interface ContextRunner {
      */
     <T> List<T> executeBlocking(int instances, Consumer<Handler<AsyncResult<T>>> consumer, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
 
+    /**
+     * Create a proxy that guarantees that objects aren't shared across Vert.x contexts.
+     * This is useful for things like {@code HttpClient} which were designed to be used on a singe context.
+     * Each time a method is called on the proxy, a cache is checked to see if an object already exists
+     * for the current context. If there isn't one, the {@code creator} function is used to create one. Then then
+     * method is routed on to the real object.
+     *
+     * This method can be called from any thread. However, the methods on the proxy itself must be called from
+     * within a Vert.x context - for example as part of an {@code HttpServer} request handler.
+     *
+     * @param creator creates the object to be tied to a context
+     * @param clazz the interface to be proxied; e.g., {@code HttpClient}
+     * @param <R> the type to be proxied; same as {@code clazz}
+     * @return the proxy
+     */
     <R> R createProxy(Function<Vertx,R> creator, Class<R> clazz);
 }
