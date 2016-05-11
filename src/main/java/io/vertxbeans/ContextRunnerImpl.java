@@ -29,10 +29,9 @@ public class ContextRunnerImpl implements ContextRunner{
     }
     @Override
     public <T> void execute(int instances, Consumer<Handler<AsyncResult<T>>> consumer, Handler<AsyncResult<List<T>>> resultHandler) {
-        if (Thread.currentThread().getClass().getName().startsWith("io.vertx")){
+        if (Vertx.currentContext() != null){
             throw new IllegalStateException("Already on a Vert.x thread!");
         }
-
         ResultCollector<T> collector = new ResultCollector<>(instances, resultHandler);
         for (int i = 0; i < instances; i++){
             wrap(consumer).accept(result -> {
