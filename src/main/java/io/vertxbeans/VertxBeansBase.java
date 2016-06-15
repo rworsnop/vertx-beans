@@ -1,20 +1,16 @@
 package io.vertxbeans;
 
-import io.vertx.core.AsyncResult;
 import io.vertx.core.AsyncResultHandler;
-import io.vertx.core.Handler;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.metrics.MetricsOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.env.Environment;
 
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 
 import static java.util.concurrent.TimeUnit.MINUTES;
@@ -29,43 +25,31 @@ public class VertxBeansBase {
     @Autowired(required = false)
     private MetricsOptions metricsOptions;
 
+    @Autowired
+    private Environment env;
+
     @Bean
-    protected VertxOptions vertxOptions(
-            @Value("${vertx.warning-exception-time:}") Long warningExceptionTime,
-            @Value("${vertx.event-loop-pool-size:}") Integer eventLoopPoolSize,
-            @Value("${vertx.max-event-loop-execution-time:}") Long maxEventLoopExecutionTime,
-            @Value("${vertx.worker-pool-size:}") Integer workerPoolSize,
-            @Value("${vertx.max-worker-execution-time:}") Long maxWorkerExecutionTime,
-            @Value("${vertx.blocked-thread-check-interval:}") Long blockedThreadCheckInterval,
-            @Value("${vertx.internal-blocking-pool-size:}") Integer internalBlockingPoolSize,
-            @Value("${vertx.ha-enabled:false}") boolean haEnabled,
-            @Value("${vertx.ha-group:}") String haGroup,
-            @Value("${vertx.quorum-size:}") Integer quorumSize,
-            @Value("${vertx.cluster-host:localhost}") String clusterHost,
-            @Value("${vertx.cluster-port:}") Integer clusterPort,
-            @Value("${vertx.cluster-ping-interval:}") Long clusterPingInterval,
-            @Value("${vertx.cluster-ping-reply-interval:}") Long clusterPingReplyInterval,
-            @Value("${vertx.clustered:false}") boolean clustered) {
+    protected VertxOptions vertxOptions() {
         VertxOptions options = new VertxOptions();
 
-        setParameter(warningExceptionTime, options::setWarningExceptionTime);
-        setParameter(eventLoopPoolSize, options::setEventLoopPoolSize);
-        setParameter(maxEventLoopExecutionTime, options::setMaxEventLoopExecuteTime);
-        setParameter(workerPoolSize, options::setWorkerPoolSize);
-        setParameter(maxWorkerExecutionTime, options::setMaxWorkerExecuteTime);
-        setParameter(blockedThreadCheckInterval, options::setBlockedThreadCheckInterval);
-        setParameter(internalBlockingPoolSize, options::setInternalBlockingPoolSize);
-        options.setHAEnabled(haEnabled);
-        setParameter(haGroup, options::setHAGroup);
-        setParameter(quorumSize, options::setQuorumSize);
-        options.setClustered(clustered);
-        options.setClusterHost(clusterHost);
-        setParameter(clusterPort, options::setClusterPort);
-        setParameter(clusterPingInterval, options::setClusterPingInterval);
-        setParameter(clusterPingReplyInterval, options::setClusterPingReplyInterval);
+        setParameter(env.getProperty("vertx.warning-exception-time", Long.class), options::setWarningExceptionTime);
+        setParameter(env.getProperty("vertx.event-loop-pool-size", Integer.class), options::setEventLoopPoolSize);
+        setParameter(env.getProperty("vertx.max-event-loop-execution-time", Long.class), options::setMaxEventLoopExecuteTime);
+        setParameter(env.getProperty("vertx.worker-pool-size", Integer.class), options::setWorkerPoolSize);
+        setParameter(env.getProperty("vertx.max-worker-execution-time", Long.class), options::setMaxWorkerExecuteTime);
+        setParameter(env.getProperty("vertx.blocked-thread-check-interval", Long.class), options::setBlockedThreadCheckInterval);
+        setParameter(env.getProperty("vertx.internal-blocking-pool-size", Integer.class), options::setInternalBlockingPoolSize);
+        options.setHAEnabled(env.getProperty("vertx.ha-enabled",Boolean.class, false));
+        setParameter(env.getProperty("vertx.ha-group", ""), options::setHAGroup);
+        setParameter(env.getProperty("vertx.quorum-size", Integer.class), options::setQuorumSize);
+        options.setClustered(env.getProperty("vertx.clustered", Boolean.class, false));
+        options.setClusterHost(env.getProperty("vertx.cluster-host", "localhost"));
+        setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
+        setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
+        setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
-
+        
         return options;
     }
 
