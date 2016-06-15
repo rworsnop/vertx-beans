@@ -23,13 +23,13 @@ Maven:
 <dependency>
     <groupId>com.github.rworsnop</groupId>
     <artifactId>vertx-beans</artifactId>
-    <version>1.2.1</version>
+    <version>1.3.0</version>
 </dependency>
 ```
 
 Gradle: 
 ```
-compile 'com.github.rworsnop:vertx-beans:1.2.1'
+compile 'com.github.rworsnop:vertx-beans:1.3.0'
 ```
 
 
