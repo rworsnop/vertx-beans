@@ -7,7 +7,7 @@ import io.vertx.core.impl.launcher.commands.BareCommand;
  */
 public class VertxBeansCommand extends BareCommand {
 
-    protected String getHostDefaultAddress() {
+    protected String getDefaultHostAddress() {
         return getDefaultAddress();
     }
 }

@@ -43,7 +43,7 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.ha-group", ""), options::setHAGroup);
         setParameter(env.getProperty("vertx.quorum-size", Integer.class), options::setQuorumSize);
         options.setClustered(env.getProperty("vertx.clustered", Boolean.class, false));
-        options.setClusterHost(env.getProperty("vertx.cluster-host", new VertxBeansCommand().getHostDefaultAddress()));
+        options.setClusterHost(env.getProperty("vertx.cluster-host", new VertxBeansCommand().getDefaultHostAddress()));
         setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
         setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
         setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
