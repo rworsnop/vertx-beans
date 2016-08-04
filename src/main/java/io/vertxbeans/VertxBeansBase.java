@@ -27,7 +27,7 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  */
 public class VertxBeansBase {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(VertxBeansBase.class);
+    private static final Logger log = LoggerFactory.getLogger(VertxBeansBase.class);
 
     @Autowired(required = false)
     private ClusterManager clusterManager;
@@ -90,7 +90,7 @@ public class VertxBeansBase {
         try {
             nets = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException e) {
-            LOGGER.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
+            log.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
             return "localhost";
         }
         NetworkInterface netinf;
@@ -105,7 +105,7 @@ public class VertxBeansBase {
                 }
             }
         }
-        LOGGER.info("Couldn't determine the network host. Using \"localhost\" as host address");
+        log.info("Couldn't determine the network host. Using \"localhost\" as host address");
         return "localhost";
     }
 }
