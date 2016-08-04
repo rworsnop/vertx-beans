@@ -39,38 +39,38 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.max-worker-execution-time", Long.class), options::setMaxWorkerExecuteTime);
         setParameter(env.getProperty("vertx.blocked-thread-check-interval", Long.class), options::setBlockedThreadCheckInterval);
         setParameter(env.getProperty("vertx.internal-blocking-pool-size", Integer.class), options::setInternalBlockingPoolSize);
-        options.setHAEnabled(env.getProperty("vertx.ha-enabled",Boolean.class, false));
+        options.setHAEnabled(env.getProperty("vertx.ha-enabled", Boolean.class, false));
         setParameter(env.getProperty("vertx.ha-group", ""), options::setHAGroup);
         setParameter(env.getProperty("vertx.quorum-size", Integer.class), options::setQuorumSize);
         options.setClustered(env.getProperty("vertx.clustered", Boolean.class, false));
-        options.setClusterHost(env.getProperty("vertx.cluster-host", "localhost"));
+        options.setClusterHost(env.getProperty("vertx.cluster-host", new VertxBeansCommand().getHostDefaultAddress()));
         setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
         setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
         setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
-        
+
         return options;
     }
 
     protected <T> T clusteredVertx(Consumer<AsyncResultHandler<T>> consumer) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<T> future = new CompletableFuture<>();
         clusteredVertx(consumer, ar -> {
-            if (ar.succeeded()){
+            if (ar.succeeded()) {
                 future.complete(ar.result());
-            } else{
+            } else {
                 future.completeExceptionally(ar.cause());
             }
         });
         return future.get(2, MINUTES);
     }
 
-    private <T> void clusteredVertx(Consumer<AsyncResultHandler<T>> consumer, AsyncResultHandler<T> handler){
+    private <T> void clusteredVertx(Consumer<AsyncResultHandler<T>> consumer, AsyncResultHandler<T> handler) {
         consumer.accept(handler);
     }
 
-    private <T> void setParameter(T param, Consumer<T> setter){
-        if (param != null){
+    private <T> void setParameter(T param, Consumer<T> setter) {
+        if (param != null) {
             setter.accept(param);
         }
     }
