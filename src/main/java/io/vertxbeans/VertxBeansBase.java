@@ -2,12 +2,19 @@ package io.vertxbeans;
 
 import io.vertx.core.AsyncResultHandler;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.logging.Logger;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.metrics.MetricsOptions;
 import io.vertx.core.spi.cluster.ClusterManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 
+import java.net.Inet6Address;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Enumeration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
@@ -19,6 +26,9 @@ import static java.util.concurrent.TimeUnit.MINUTES;
  * Created by Rob Worsnop on 9/5/15.
  */
 public class VertxBeansBase {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(VertxBeansBase.class);
+
     @Autowired(required = false)
     private ClusterManager clusterManager;
 
@@ -43,7 +53,7 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.ha-group", ""), options::setHAGroup);
         setParameter(env.getProperty("vertx.quorum-size", Integer.class), options::setQuorumSize);
         options.setClustered(env.getProperty("vertx.clustered", Boolean.class, false));
-        options.setClusterHost(env.getProperty("vertx.cluster-host", new VertxBeansCommand().getDefaultHostAddress()));
+        options.setClusterHost(env.getProperty("vertx.cluster-host", getDefaultAddress()));
         setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
         setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
         setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
@@ -75,4 +85,27 @@ public class VertxBeansBase {
         }
     }
 
+    private String getDefaultAddress() {
+        Enumeration<NetworkInterface> nets;
+        try {
+            nets = NetworkInterface.getNetworkInterfaces();
+        } catch (SocketException e) {
+            LOGGER.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
+            return "localhost";
+        }
+        NetworkInterface netinf;
+        while (nets.hasMoreElements()) {
+            netinf = nets.nextElement();
+            Enumeration<InetAddress> addresses = netinf.getInetAddresses();
+            while (addresses.hasMoreElements()) {
+                InetAddress address = addresses.nextElement();
+                if (!address.isAnyLocalAddress() && !address.isMulticastAddress()
+                        && !(address instanceof Inet6Address)) {
+                    return address.getHostAddress();
+                }
+            }
+        }
+        LOGGER.info("Couldn't determine the network host. Using \"localhost\" as host address");
+        return "localhost";
+    }
 }
