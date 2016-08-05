@@ -14,12 +14,12 @@ import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.util.Enumeration;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 import java.util.function.Consumer;
 
+import static java.util.Collections.list;
 import static java.util.concurrent.TimeUnit.MINUTES;
 
 /**
@@ -86,26 +86,17 @@ public class VertxBeansBase {
     }
 
     private String getDefaultAddress() {
-        Enumeration<NetworkInterface> nets;
-        try {
-            nets = NetworkInterface.getNetworkInterfaces();
+       try {
+            return list(NetworkInterface.getNetworkInterfaces()).stream()
+                    .flatMap(ni -> list(ni.getInetAddresses()).stream())
+                    .filter(address -> !address.isAnyLocalAddress())
+                    .filter(address -> !address.isMulticastAddress())
+                    .filter(address ->!(address instanceof Inet6Address))
+                    .map(InetAddress::getHostAddress)
+                    .findFirst().orElse("localhost");
         } catch (SocketException e) {
             log.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
             return "localhost";
-        }
-        NetworkInterface netinf;
-        while (nets.hasMoreElements()) {
-            netinf = nets.nextElement();
-            Enumeration<InetAddress> addresses = netinf.getInetAddresses();
-            while (addresses.hasMoreElements()) {
-                InetAddress address = addresses.nextElement();
-                if (!address.isAnyLocalAddress() && !address.isMulticastAddress()
-                        && !(address instanceof Inet6Address)) {
-                    return address.getHostAddress();
-                }
-            }
-        }
-        log.info("Couldn't determine the network host. Using \"localhost\" as host address");
-        return "localhost";
+       }
     }
 }
