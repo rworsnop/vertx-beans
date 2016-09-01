@@ -91,12 +91,13 @@ public class VertxBeansBase {
                     .flatMap(ni -> list(ni.getInetAddresses()).stream())
                     .filter(address -> !address.isAnyLocalAddress())
                     .filter(address -> !address.isMulticastAddress())
+                    .filter(address -> !address.isLoopbackAddress())
                     .filter(address ->!(address instanceof Inet6Address))
                     .map(InetAddress::getHostAddress)
-                    .findFirst().orElse("localhost");
+                    .findFirst().orElse("0.0.0.0");
         } catch (SocketException e) {
             log.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
-            return "localhost";
+            return "0.0.0.0";
        }
     }
 }
