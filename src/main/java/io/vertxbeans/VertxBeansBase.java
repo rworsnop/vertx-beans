@@ -91,7 +91,7 @@ public class VertxBeansBase {
             nets = NetworkInterface.getNetworkInterfaces();
         } catch (SocketException e) {
             log.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
-            return "localhost";
+            return "0.0.0.0";
         }
         NetworkInterface netinf;
         while (nets.hasMoreElements()) {
@@ -106,6 +106,6 @@ public class VertxBeansBase {
             }
         }
         log.info("Couldn't determine the network host. Using \"localhost\" as host address");
-        return "localhost";
+        return "0.0.0.0";
     }
 }
