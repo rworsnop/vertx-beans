@@ -37,13 +37,13 @@
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-core</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>io.vertx</groupId>
             <artifactId>vertx-rx-java</artifactId>
-            <version>3.3.2</version>
+            <version>3.3.3</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
