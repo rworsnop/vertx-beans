@@ -57,6 +57,8 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
         setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
         setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
+        setParameter(env.getProperty("vertx.cluster.public.host", String.class), options::setClusterPublicHost);
+        setParameter(env.getProperty("vertx.cluster.public.port", Integer.class), options::setClusterPublicPort);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
 
