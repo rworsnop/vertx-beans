@@ -1,6 +1,7 @@
 package io.vertxbeans;
 
-import io.vertx.core.AsyncResultHandler;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.VertxOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -63,7 +64,7 @@ public class VertxBeansBase {
         return options;
     }
 
-    protected <T> T clusteredVertx(Consumer<AsyncResultHandler<T>> consumer) throws InterruptedException, ExecutionException, TimeoutException {
+    protected <T> T clusteredVertx(Consumer<Handler<AsyncResult<T>>> consumer) throws InterruptedException, ExecutionException, TimeoutException {
         CompletableFuture<T> future = new CompletableFuture<>();
         clusteredVertx(consumer, ar -> {
             if (ar.succeeded()) {
@@ -75,7 +76,7 @@ public class VertxBeansBase {
         return future.get(2, MINUTES);
     }
 
-    private <T> void clusteredVertx(Consumer<AsyncResultHandler<T>> consumer, AsyncResultHandler<T> handler) {
+    private <T> void clusteredVertx(Consumer<Handler<AsyncResult<T>>> consumer, Handler<AsyncResult<T>> handler) {
         consumer.accept(handler);
     }
 
