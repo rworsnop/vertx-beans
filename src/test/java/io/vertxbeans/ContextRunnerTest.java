@@ -40,7 +40,7 @@ public class ContextRunnerTest {
     @Test(expected = ExecutionException.class)
     public void failure() throws InterruptedException, ExecutionException, TimeoutException {
         contextRunner.executeBlocking(2, handler ->
-                handler.handle(Future.failedFuture("Something bad happened")), 10, MILLISECONDS);
+                handler.handle(Future.failedFuture("Something bad happened")), 100, MILLISECONDS);
     }
 
     @Test(expected = TimeoutException.class)
