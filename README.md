@@ -25,13 +25,13 @@ Maven:
 <dependency>
     <groupId>com.github.rworsnop</groupId>
     <artifactId>vertx-beans</artifactId>
-    <version>1.3.1</version>
+    <version>1.4.0</version>
 </dependency>
 ```
 
 Gradle: 
 ```
-compile 'com.github.rworsnop:vertx-beans:1.3.1'
+compile 'com.github.rworsnop:vertx-beans:1.4.0'
 ```
 
 
@@ -97,6 +97,10 @@ Here are the properties:
 - **`vertx.cluster-host`** &mdash; See `VertxOptions.setClusterHost`
 
 - **`vertx.cluster-port`** &mdash; See `VertxOptions.setClusterPort`
+
+- **`vertx.cluster-public-host`** &mdash; See `VertxOptions.setClusterPublicHost`
+
+- **`vertx.cluster-public-port`** &mdash; See `VertxOptions.setClusterPublicPort`
 
 - **`vertx.cluster-ping-interval`** &mdash; See `VertxOptions.setClusterPingInterval`
 
