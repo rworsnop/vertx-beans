@@ -1,8 +1,8 @@
 package io.vertxbeans.rxjava;
 
 import io.vertx.core.Future;
-import rx.Observable;
-import rx.Subscriber;
+import rx.Single;
+import rx.SingleSubscriber;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -22,16 +22,16 @@ public class ContextRunnerImpl implements ContextRunner {
     }
 
     @Override
-    public <T> Observable<List<T>> execute(int instances, Supplier<Observable<T>> supplier) {
-        return Observable.create(subscriber -> doExecute(subscriber, instances, supplier));
+    public <T> Single<List<T>> execute(int instances, Supplier<Single<T>> supplier) {
+        return Single.create(subscriber -> doExecute(subscriber, instances, supplier));
     }
 
     @Override
-    public <T> List<T> executeBlocking(int instances, Supplier<Observable<T>> supplier, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
+    public <T> List<T> executeBlocking(int instances, Supplier<Single<T>> supplier, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException {
         return execute(instances, supplier).toBlocking().toFuture().get(timeout, unit);
     }
 
-    private <T> void doExecute(Subscriber<? super List<T>> subscriber, int instances, Supplier<Observable<T>> supplier){
+    private <T> void doExecute(SingleSubscriber<? super List<T>> subscriber, int instances, Supplier<Single<T>> supplier){
         delegate.<T>execute(instances,
                 resultHandler -> supplier.get().subscribe(
                         result->resultHandler.handle(Future.succeededFuture(result)),
@@ -39,8 +39,7 @@ public class ContextRunnerImpl implements ContextRunner {
 
                 result -> {
                     if (result.succeeded()){
-                        subscriber.onNext(result.result());
-                        subscriber.onCompleted();
+                        subscriber.onSuccess(result.result());
                     } else{
                         subscriber.onError(result.cause());
                     }

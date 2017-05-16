@@ -3,7 +3,7 @@ package io.vertxbeans.rxjava;
 import io.vertx.core.Vertx;
 import org.junit.Before;
 import org.junit.Test;
-import rx.Observable;
+import rx.Single;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -30,9 +30,9 @@ public class ContextRunnerTest {
     public void success() throws InterruptedException, ExecutionException, TimeoutException {
         List<String> results = contextRunner.executeBlocking(2, () -> {
             if (Thread.currentThread().getClass().getName().startsWith("io.vertx")){
-                return Observable.just("OK");
+                return Single.just("OK");
             } else{
-                return Observable.error(new RuntimeException("Not on event loop!"));
+                return Single.error(new RuntimeException("Not on event loop!"));
             }
         }, 10, MILLISECONDS);
         assertThat(String.join(".", results), equalTo("OK.OK"));
@@ -40,12 +40,12 @@ public class ContextRunnerTest {
 
     @Test(expected = ExecutionException.class)
     public void failure() throws InterruptedException, ExecutionException, TimeoutException {
-        contextRunner.executeBlocking(2, () -> Observable.error(new RuntimeException()), 10, MILLISECONDS);
+        contextRunner.executeBlocking(2, () -> Single.error(new RuntimeException()), 10, MILLISECONDS);
     }
 
     @Test(expected = TimeoutException.class)
     public void timeout() throws InterruptedException, ExecutionException, TimeoutException {
-        contextRunner.executeBlocking(1, () -> Observable.create(subscriber -> {}), 10, MILLISECONDS);
+        contextRunner.executeBlocking(1, () -> Single.create(subscriber -> {}), 10, MILLISECONDS);
     }
 
 }
