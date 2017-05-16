@@ -1,6 +1,6 @@
 package io.vertxbeans.rxjava;
 
-import rx.Observable;
+import rx.Single;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -25,7 +25,7 @@ public interface ContextRunner {
      * @param <T> the type of object we are creating; e.g., {@code HttpServer}
      * @return an {@code Observable} that either emits a collated {@code List} of items, or an error.
      */
-    <T> Observable<List<T>> execute(int instances, Supplier<Observable<T>> supplier);
+    <T> Single<List<T>> execute(int instances, Supplier<Single<T>> supplier);
     /**
      * Execute user-supplied code on a new event loop and provide the collated results synchronously.
      *
@@ -39,5 +39,5 @@ public interface ContextRunner {
      * @throws ExecutionException if your code raises an error
      * @throws TimeoutException if all of your instances don't provide a result within the timeout
      */
-    <T> List<T> executeBlocking(int instances, Supplier<Observable<T>> supplier, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
+    <T> List<T> executeBlocking(int instances, Supplier<Single<T>> supplier, long timeout, TimeUnit unit) throws InterruptedException, ExecutionException, TimeoutException;
 }
