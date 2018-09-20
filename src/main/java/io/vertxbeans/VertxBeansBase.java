@@ -2,6 +2,7 @@ package io.vertxbeans;
 
 import io.vertx.core.AsyncResultHandler;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.metrics.MetricsOptions;
@@ -33,6 +34,9 @@ public class VertxBeansBase {
     private ClusterManager clusterManager;
 
     @Autowired(required = false)
+    private EventBusOptions eventBusOptions;
+
+    @Autowired(required = false)
     private MetricsOptions metricsOptions;
 
     @Autowired
@@ -59,6 +63,7 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
+        setParameter(eventBusOptions, options::setEventBusOptions);
 
         return options;
     }
