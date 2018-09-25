@@ -25,13 +25,13 @@ Maven:
 <dependency>
     <groupId>com.github.rworsnop</groupId>
     <artifactId>vertx-beans</artifactId>
-    <version>1.4.0</version>
+    <version>1.5.0</version>
 </dependency>
 ```
 
 Gradle: 
 ```
-compile 'com.github.rworsnop:vertx-beans:1.4.0'
+compile 'com.github.rworsnop:vertx-beans:1.5.0'
 ```
 
 
