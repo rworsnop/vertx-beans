@@ -3,6 +3,7 @@ package io.vertxbeans;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.eventbus.EventBusOptions;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.metrics.MetricsOptions;
@@ -34,6 +35,9 @@ public class VertxBeansBase {
     private ClusterManager clusterManager;
 
     @Autowired(required = false)
+    private EventBusOptions eventBusOptions;
+
+    @Autowired(required = false)
     private MetricsOptions metricsOptions;
 
     @Autowired
@@ -62,6 +66,7 @@ public class VertxBeansBase {
         setParameter(env.getProperty("vertx.cluster-public-port", Integer.class), options::setClusterPublicPort);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
+        setParameter(eventBusOptions, options::setEventBusOptions);
 
         return options;
     }
