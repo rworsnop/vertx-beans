@@ -35,7 +35,7 @@ public interface ContextRunner {
      * @param unit unit for the timeout
      * @param <T> the type of object we are creating; e.g., {@code HttpServer}
      * @return a collated {@code List} of items
-     * @throws InterruptedException
+     * @throws InterruptedException if the thread is interrupted
      * @throws ExecutionException if your code raises an error
      * @throws TimeoutException if all of your instances don't provide a result within the timeout
      */
