@@ -1,8 +1,8 @@
 package io.vertxbeans.rxjava;
 
 import io.vertx.core.Vertx;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import rx.Observable;
 
 import java.util.List;
@@ -10,8 +10,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 /**
@@ -21,7 +21,7 @@ public class ContextRunnerTest {
 
     private ContextRunner contextRunner;
 
-    @Before
+    @BeforeEach
     public void setup(){
         contextRunner = new ContextRunnerImpl(new io.vertxbeans.ContextRunnerImpl(Vertx.vertx()));
     }
@@ -35,17 +35,20 @@ public class ContextRunnerTest {
                 return Observable.error(new RuntimeException("Not on event loop!"));
             }
         }, 10, MILLISECONDS);
-        assertThat(String.join(".", results), equalTo("OK.OK"));
+        assertThat(String.join(".", results)).isEqualTo("OK.OK");
     }
 
-    @Test(expected = ExecutionException.class)
-    public void failure() throws InterruptedException, ExecutionException, TimeoutException {
-        contextRunner.executeBlocking(2, () -> Observable.error(new RuntimeException()), 10, MILLISECONDS);
+    @Test
+    public void failure() {
+        assertThatThrownBy(() ->  contextRunner.executeBlocking(2, () ->
+                Observable.error(new RuntimeException()), 10, MILLISECONDS)).isInstanceOf(ExecutionException.class);
+
     }
 
-    @Test(expected = TimeoutException.class)
-    public void timeout() throws InterruptedException, ExecutionException, TimeoutException {
-        contextRunner.executeBlocking(1, () -> Observable.create(subscriber -> {}), 10, MILLISECONDS);
+    @Test
+    public void timeout() {
+        assertThatThrownBy(() -> contextRunner.executeBlocking(1,
+                () -> Observable.create(subscriber -> {}), 10, MILLISECONDS)).isInstanceOf(TimeoutException.class);
     }
 
 }
