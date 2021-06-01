@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/rworsnop/vertx-beans.svg?branch=master)](https://travis-ci.org/rworsnop/vertx-beans)
+[![Build Status](https://travis-ci.com/rworsnop/vertx-beans.svg?branch=master)](https://travis-ci.com/rworsnop/vertx-beans)
 
 See the [api docs](http://rworsnop.github.io/vertx-beans/apidocs/)
 
