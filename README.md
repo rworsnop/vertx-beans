@@ -92,20 +92,6 @@ Here are the properties:
 
 - **`vertx.quorum-size`** &mdash; See `VertxOptions.setQuorumSize`
 
-- **`vertx.clustered`** &mdash; See `VertxOptions.setClustered`
-
-- **`vertx.cluster-host`** &mdash; See `VertxOptions.setClusterHost`
-
-- **`vertx.cluster-port`** &mdash; See `VertxOptions.setClusterPort`
-
-- **`vertx.cluster-public-host`** &mdash; See `VertxOptions.setClusterPublicHost`
-
-- **`vertx.cluster-public-port`** &mdash; See `VertxOptions.setClusterPublicPort`
-
-- **`vertx.cluster-ping-interval`** &mdash; See `VertxOptions.setClusterPingInterval`
-
-- **`vertx.cluster-ping-reply-interval`** &mdash; See `VertxOptions.setClusterPingReplyInterval`
-
 ## Providing your own ClusterManager and/or MetricsOptions
 
 To provide your own `ClusterManager` or `MetricsOptions`, you just have to declare the appropriate bean in your 

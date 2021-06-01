@@ -57,13 +57,6 @@ public class VertxBeansBase {
         options.setHAEnabled(env.getProperty("vertx.ha-enabled", Boolean.class, false));
         setParameter(env.getProperty("vertx.ha-group", ""), options::setHAGroup);
         setParameter(env.getProperty("vertx.quorum-size", Integer.class), options::setQuorumSize);
-        options.setClustered(env.getProperty("vertx.clustered", Boolean.class, false));
-        options.setClusterHost(env.getProperty("vertx.cluster-host", getDefaultAddress()));
-        setParameter(env.getProperty("vertx.cluster-port", Integer.class), options::setClusterPort);
-        setParameter(env.getProperty("vertx.cluster-ping-interval", Long.class), options::setClusterPingInterval);
-        setParameter(env.getProperty("vertx.cluster-ping-reply-interval", Long.class), options::setClusterPingReplyInterval);
-        setParameter(env.getProperty("vertx.cluster-public-host", String.class), options::setClusterPublicHost);
-        setParameter(env.getProperty("vertx.cluster-public-port", Integer.class), options::setClusterPublicPort);
         setParameter(clusterManager, options::setClusterManager);
         setParameter(metricsOptions, options::setMetricsOptions);
         setParameter(eventBusOptions, options::setEventBusOptions);
@@ -91,21 +84,5 @@ public class VertxBeansBase {
         if (param != null) {
             setter.accept(param);
         }
-    }
-
-    private String getDefaultAddress() {
-       try {
-            return list(NetworkInterface.getNetworkInterfaces()).stream()
-                    .flatMap(ni -> list(ni.getInetAddresses()).stream())
-                    .filter(address -> !address.isAnyLocalAddress())
-                    .filter(address -> !address.isMulticastAddress())
-                    .filter(address -> !address.isLoopbackAddress())
-                    .filter(address ->!(address instanceof Inet6Address))
-                    .map(InetAddress::getHostAddress)
-                    .findFirst().orElse("0.0.0.0");
-        } catch (SocketException e) {
-            log.warn("Unable to determine network interfaces. Using \"localhost\" as host address.", e);
-            return "0.0.0.0";
-       }
     }
 }

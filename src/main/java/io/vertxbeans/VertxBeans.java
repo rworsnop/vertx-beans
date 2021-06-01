@@ -12,12 +12,11 @@ import org.springframework.context.annotation.Configuration;
  * Created by Rob Worsnop on 9/5/15.
  */
 @Configuration
-public class VertxBeans extends VertxBeansBase{
-
+public class VertxBeans extends VertxBeansBase {
 
     @Bean
     public Vertx vertx(VertxOptions options) throws Throwable {
-        if (options.isClustered()) {
+        if (options.getClusterManager() != null) {
             return clusteredVertx(options);
         } else {
             return Vertx.vertx(options);
@@ -30,22 +29,22 @@ public class VertxBeans extends VertxBeansBase{
     }
 
     @Bean
-    public FileSystem fileSystem(Vertx vertx){
+    public FileSystem fileSystem(Vertx vertx) {
         return vertx.fileSystem();
     }
 
     @Bean
-    public SharedData sharedData(Vertx vertx){
+    public SharedData sharedData(Vertx vertx) {
         return vertx.sharedData();
     }
 
     @Bean
-    public ContextRunner contextRunner(Vertx vertx){
+    public ContextRunner contextRunner(Vertx vertx) {
         return new ContextRunnerImpl(vertx);
     }
 
     private Vertx clusteredVertx(VertxOptions options) throws Throwable {
-        return clusteredVertx(handler->Vertx.clusteredVertx(options, handler));
+        return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
     }
 
 
