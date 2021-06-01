@@ -10,6 +10,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -34,14 +35,14 @@ public class ContextRunnerTest {
             } else{
                 return Observable.error(new RuntimeException("Not on event loop!"));
             }
-        }, 10, MILLISECONDS);
+        }, 10, SECONDS);
         assertThat(String.join(".", results)).isEqualTo("OK.OK");
     }
 
     @Test
     public void failure() {
         assertThatThrownBy(() ->  contextRunner.executeBlocking(2, () ->
-                Observable.error(new RuntimeException()), 10, MILLISECONDS)).isInstanceOf(ExecutionException.class);
+                Observable.error(new RuntimeException()), 10, SECONDS)).isInstanceOf(ExecutionException.class);
 
     }
 
