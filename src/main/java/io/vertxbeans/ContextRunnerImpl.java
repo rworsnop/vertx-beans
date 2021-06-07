@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxImpl;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 
@@ -57,20 +58,11 @@ public class ContextRunnerImpl implements ContextRunner{
         return future.get(timeout, unit);
     }
 
-
-
-
     private <T> Consumer<Handler<AsyncResult<T>>>  wrap(Consumer<Handler<AsyncResult<T>>> consumer){
-        Context context;
-        if (vertx instanceof VertxImpl) {
-            // Create a new context
-            context = ((VertxImpl) vertx).createEventLoopContext();
-        } else {
-            // Use the default vert.x interface behaviour of getOrCreateContext() which will return the same context
-            context = vertx.getOrCreateContext();
-        }
-        return resultHandler -> context.executeBlocking(
-                v->consumer.accept(result -> context.runOnContext(v1 ->resultHandler.handle(result))), false);
+        Context context = ((VertxInternal) vertx).createEventLoopContext();
+
+        return resultHandler -> context.runOnContext(
+                v->consumer.accept(result -> context.runOnContext(v1 ->resultHandler.handle(result))));
     }
 
     private static class ResultCollector<T>{
