@@ -15,12 +15,16 @@ import org.springframework.context.annotation.Configuration;
 public class VertxBeans extends VertxBeansBase {
 
     @Bean
-    public Vertx vertx(VertxOptions options) throws Throwable {
-        if (options.getClusterManager() != null) {
-            return clusteredVertx(options);
-        } else {
-            return Vertx.vertx(options);
-        }
+    public Vertx vertx(VertxOptions options) throws Exception {
+       try {
+           if (options.getClusterManager() != null) {
+               return clusteredVertx(options);
+           } else {
+               return Vertx.vertx(options);
+           }
+       } catch (Throwable throwable) {
+           throw new Exception(throwable);
+       }
     }
 
     @Bean
