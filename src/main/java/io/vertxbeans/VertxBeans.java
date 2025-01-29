@@ -16,15 +16,11 @@ public class VertxBeans extends VertxBeansBase {
 
     @Bean
     public Vertx vertx(VertxOptions options) throws Exception {
-       try {
-           if (options.getClusterManager() != null) {
-               return clusteredVertx(options);
-           } else {
-               return Vertx.vertx(options);
-           }
-       } catch (Throwable throwable) {
-           throw new Exception(throwable);
-       }
+        if (options.getClusterManager() != null) {
+            return clusteredVertx(options);
+        } else {
+            return Vertx.vertx(options);
+        }
     }
 
     @Bean
@@ -47,7 +43,7 @@ public class VertxBeans extends VertxBeansBase {
         return new ContextRunnerImpl(vertx);
     }
 
-    private Vertx clusteredVertx(VertxOptions options) throws Throwable {
+    private Vertx clusteredVertx(VertxOptions options) throws Exception {
         return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
     }
 

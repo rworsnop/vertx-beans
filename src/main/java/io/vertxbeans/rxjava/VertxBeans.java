@@ -7,7 +7,6 @@ import io.vertx.rxjava.core.eventbus.EventBus;
 import io.vertx.rxjava.core.file.FileSystem;
 import io.vertx.rxjava.core.shareddata.SharedData;
 import io.vertxbeans.VertxBeansBase;
-import org.assertj.core.internal.bytebuddy.implementation.bytecode.Throw;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,14 +18,10 @@ public class VertxBeans extends VertxBeansBase {
 
     @Bean
     public Vertx vertx(VertxOptions options) throws Exception {
-        try {
-            if (options.getClusterManager() != null) {
-                return clusteredVertx(options);
-            } else {
-                return Vertx.vertx(options);
-            }
-        } catch (Throwable throwable) {
-            throw new Exception(throwable);
+        if (options.getClusterManager() != null) {
+            return clusteredVertx(options);
+        } else {
+            return Vertx.vertx(options);
         }
     }
 
@@ -50,7 +45,7 @@ public class VertxBeans extends VertxBeansBase {
         return new ContextRunnerImpl(new io.vertxbeans.ContextRunnerImpl(vertx.getDelegate()));
     }
 
-    private Vertx clusteredVertx(VertxOptions options) throws Throwable {
+    private Vertx clusteredVertx(VertxOptions options) throws Exception {
         return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
     }
 
