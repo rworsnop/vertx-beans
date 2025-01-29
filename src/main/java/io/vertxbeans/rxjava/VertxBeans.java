@@ -17,7 +17,7 @@ import org.springframework.context.annotation.Configuration;
 public class VertxBeans extends VertxBeansBase {
 
     @Bean
-    public Vertx vertx(VertxOptions options) throws Throwable {
+    public Vertx vertx(VertxOptions options) throws Exception {
         if (options.getClusterManager() != null) {
             return clusteredVertx(options);
         } else {
@@ -45,7 +45,7 @@ public class VertxBeans extends VertxBeansBase {
         return new ContextRunnerImpl(new io.vertxbeans.ContextRunnerImpl(vertx.getDelegate()));
     }
 
-    private Vertx clusteredVertx(VertxOptions options) throws Throwable {
+    private Vertx clusteredVertx(VertxOptions options) throws Exception {
         return clusteredVertx(handler -> Vertx.clusteredVertx(options, handler));
     }
 
